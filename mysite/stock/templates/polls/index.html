@@ -1,0 +1,159 @@
+<div id="container">
+	<h1 id="title">Stock Trend Prediction Using Machine Learning</h1>
+
+	<h5 id="title2">Enter Your Stock Code In Caps For Predictions</h5>
+
+	<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"> 
+
+	{% if error_message %}<p id="error"><strong>Invalid Stock Code/Number of days. No #'s are needed, days cannot exceed 50.</strong></p>{% endif %}
+	<p id="msg">We are processing your request. This should take around 30 seconds.</p>
+
+	<form id="sub" method="post" action="{% url 'stock:vote' %}">
+	{% csrf_token %}
+		<input type="text" name="stock_code" id="in" value="{{stock_code}}" placeholder="Stock code...">
+		<input type="text" name="days_to_predict" id="in" value="{{days_to_predict}}" placeholder="Number of days to predict...">
+		<input type="submit" value="Get Forecasts" id="enter" onclick="showMsg()" >
+	</form>
+	
+	<button id="q" onclick="showDesc()">How does this work?</button>
+	<p id="desc">
+	
+	I developed a software module that uses machine learning to predict stock prices based on volume predictions. For training the neural networks used in machine learning, I use the past stock price and volume data. 
+	The machine learning model used is Long Short-Term Memory (LSTM). This model is particularly useful for trend prediction because its defining feature is its ability to memorize and forget values it receives, 
+	allowing it to compare input to what is has received before. My machine learning model uses 1 neural network to predict the stock prices, and another to predict the volume trend and use that to normalize the 
+	price predictions. It relies on a metric known as on-balance-volume (OBV), which is calculated by adding or subtracting the volume for a day to a running total depending on the change in stock price.
+	
+	This machine learning model is implemented into a webserver that takes input (stock symbol, and number of days to predict) from the user.
+	In the backend, it validates that the stock symbol. It then retrieves the daily price and volume data starting from Jan 2019 to the current date using the WorldTradingData API.
+	It formats the data (price and volume) into a form that can be fed into the neural networks. If feeds the data to train the neural network.
+	Once the neural network is trained, I use the AI module to predict the price and volume trends for the number of days given by the user. It then displays the prediction in graphical form, using the google graphing API.
+	</p>
+</div>
+
+<script>
+	function showMsg(){
+		msg = document.getElementById("msg");
+		msg.style.display = "block"
+		msg.style.visibility = "visible"
+		msg = document.getElementById("error");
+		msg.style.display = "none"
+	}
+	
+	function showDesc(){
+		msg = document.getElementById("desc");
+		msg.style.display = "block"
+		msg.style.visibility = "visible"
+		msg = document.getElementById("q");
+		msg.style.display = "none"
+	}
+</script>
+
+<style>
+	#container {
+		background-image: linear-gradient(rgba(0,127,255,1), rgba(0,127,255,0));
+	}
+	
+	#q {
+		align: center;
+		width: 40%;
+		display: inline-block;
+		margin-left: 30%;
+		margin-right: 30%;
+		margin-top:10px;
+		margin-bottom:10px;
+		padding: 15px 20px;
+		font-size: 15px;
+		text-align:center;
+		text-bottom
+		font-family: 'Lato';
+		border: 1px solid black;
+		background-color: #FFFFFF;
+	}
+	
+	#in {
+		align: center;
+		width: 60%;
+		height: 60px;
+		margin-left: 20%;
+		margin-right: 20%;
+		margin-bottom:20px;
+		padding-top:20px;
+		padding:bottom:20px;
+		font-size: 40px;
+		font-family: 'Lato';
+	}
+	#title {
+		text-align: center;
+		width: 100%;
+		height: 50px;
+		padding-top:100px;
+		padding-bottom:60px;
+		font-size: 60px;
+		font-family: 'Lato';
+		color: #FFFFFF;
+	}
+	
+	#title2 {
+		text-align: center;
+		width: 100%;
+		height: 50px;
+		padding-top:0px;
+		padding-bottom:10px;
+		font-size: 40px;
+		font-family: 'Lato';
+	}
+	
+	#enter {
+		align: center;
+		width: 60%;
+		display: inline-block;
+		margin-left: 20%;
+		margin-right: 20%;
+		margin-top:20px;
+		margin-bottom:20px;
+		padding: 15px 32px;
+		font-size: 20px;
+		text-align:center;
+		text-bottom
+		font-family: 'Lato';
+		border: 1px solid black;
+		background-color: #FFFFFF;
+	}
+	
+	#error {
+		text-align: center;
+		width: 100%;
+		padding-top:10px;
+		padding-bottom:10px;
+		font-size: 24px;
+		color: #FF0000;
+		font-family: 'Lato';
+	}
+	
+	#desc {
+		text-align: center;
+		width: 80%;
+		margin-left: 10%;
+		margin-right: 10%;
+		padding-top:10px;
+		padding-bottom:10px;
+		font-size: 15px;
+		color: #FF0000;
+		font-family: 'Lato';
+		display: none;
+		visibility: hidden;
+	}
+	
+	#msg {
+		visibility:hidden;
+		display: none;
+		text-align: center;
+		width: 100%;
+		padding-top:10px;
+		padding-bottom:10px;
+		font-size: 24px;
+		color: #FF0000;
+		font-family: 'Lato';
+	}
+</style>
+		

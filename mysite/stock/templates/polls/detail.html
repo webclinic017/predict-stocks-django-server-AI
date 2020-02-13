@@ -1,0 +1,9 @@
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form id="sub" method="post" action="{% url 'polls:vote' %}">
+{% csrf_token %}
+    <input type="text" name="yeet" id="in" value="{{yeet}}">
+    <input type="submit"  value="Vote" >
+</form>

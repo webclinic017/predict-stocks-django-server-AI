@@ -1,0 +1,194 @@
+<div id="headContainer" style="font-size:0px">
+	
+</div>
+<div id="container">
+	<h1 id="title">Predictions for #{{ Stock_Name }}</h1>
+	<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"> 
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<ul id="predictions">
+	{% for choice in Predictions %}
+		<li style="visibility:hidden; display:none">{{ choice }}</li>
+	{% endfor %}
+	</ul>
+	<ul id="price">
+	{% for choice in Prices %}
+		<li style="visibility:hidden; display:none">{{ choice }}</li>
+	{% endfor %}
+	</ul>
+	<ul id="vol_predictions">
+	{% for choice in Volume_Predictions %}
+		<li style="visibility:hidden; display:none">{{ choice }}</li>
+	{% endfor %}
+	</ul>
+	<ul id="vol">
+	{% for choice in Volumes %}
+		<li style="visibility:hidden; display:none">{{ choice }}</li>
+	{% endfor %}
+	</ul>
+	<ul id="dates">
+	{% for choice in Dates %}
+		<li style="visibility:hidden; display:none">{{ choice }}</li>
+	{% endfor %}
+	</ul>
+	<script type="text/javascript">
+		  google.charts.load('current', {'packages':['corechart']});
+		  google.charts.setOnLoadCallback(drawPricesChart);
+		  google.charts.setOnLoadCallback(drawVolumeChart);
+
+		  function drawPricesChart() {
+			var predictions_list = document.getElementById("predictions");
+			
+			var date = document.getElementById("dates");
+			
+			var list1 = predictions_list.getElementsByTagName("li");
+			list1 = Array.from(list1);
+			
+			var list2 = dates.getElementsByTagName("li");
+			list2 = Array.from(list2);
+			
+			console.log(list2.length);
+			
+			var plot_data = [];
+			
+			plot_data.push(["Day Since 2019", "Stock Price"]);
+			
+			for (let i=0; i < list1.length; i++){
+				var plot_point = list1[i].innerHTML;
+				plot_point = plot_point.replace('[', '');
+				plot_point = plot_point.replace(']', '');
+				plot_point = parseFloat(plot_point, 10);
+				plot_date = list2[i].innerHTML;
+				plot_date = plot_date.replace(', midnight', '');
+				plot_data.push([plot_date, plot_point]);
+				//plot_data.push([i, plot_point]);
+			}
+			
+			console.log(plot_data);
+			
+			var options = {
+			  title: 'Stock Price Prediction',
+			  curveType: 'function',
+			  legend: { position: 'bottom' },
+			  backgroundColor: 'transparent',
+			  trendlines: { 0: {} },
+			};
+			
+			var data = google.visualization.arrayToDataTable(plot_data);
+			
+			var chart = new google.visualization.LineChart(document.getElementById('prices_chart'));
+
+			chart.draw(data, options);
+		  }
+		  
+		  function drawVolumeChart() {
+			var predictions_list = document.getElementById("vol_predictions");
+			
+			var date = document.getElementById("dates");
+			
+			var list1 = predictions_list.getElementsByTagName("li");
+			list1 = Array.from(list1);
+			
+			var list2 = dates.getElementsByTagName("li");
+			list2 = Array.from(list2);
+			
+			console.log(list1);
+			
+			var plot_data = [];
+			
+			plot_data.push(["Day Since 2019", "Stock Volume"]);
+			
+			for (let i=0; i < list1.length; i++){
+				var plot_point = list1[i].innerHTML;
+				plot_point = plot_point.replace('[', '');
+				plot_point = plot_point.replace(']', '');
+				plot_point = parseFloat(plot_point, 10);
+				plot_date = list2[i].innerHTML;
+				plot_date = plot_date.replace(', midnight', '');
+				plot_data.push([plot_date, plot_point]);
+				//plot_data.push([i, plot_point]);
+				
+			}
+			
+			console.log(plot_data);
+			
+			var options = {
+			  title: 'Stock Volume Prediction',
+			  curveType: 'function',
+			  legend: { position: 'bottom' },
+			  backgroundColor: 'transparent',
+			  
+			};
+			
+			//trendlines: { 0: {type: 'polynomial', degree: 3, color: 'green', visibleInLegend: true,} },
+			
+			var data = google.visualization.arrayToDataTable(plot_data);
+			
+			var chart = new google.visualization.LineChart(document.getElementById('volume_chart'));
+
+			chart.draw(data, options);
+		  }
+	</script>
+	<style>
+		#prices_chart {
+			width: 100%; 
+			height: 900px; 
+			align: center; 
+			display:inline-block;
+			
+		}
+		
+		#volume_chart {
+			width: 100%; 
+			height: 900px; 
+			align: center; 
+			display:inline-block;
+			
+		}
+		
+		#title {
+			font-size:50px;
+			text-align:center;
+			color: #FFFFFF;
+			font-family: 'Lato';
+			padding:50px;
+			margin-bottom: 0px;
+			width:100%;
+			display:inline-block;
+		}
+		
+		#container {
+			background-image: linear-gradient(rgba(0,127,255,1) 0%, rgba(0,127,255,0.1) 15%, rgba(0,127,255,0.4) 100%);
+		}
+	</style>
+	<div id="prices_chart" ></div>
+	<div id="volume_chart" ></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
